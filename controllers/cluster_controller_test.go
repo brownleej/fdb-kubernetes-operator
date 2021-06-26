@@ -1782,7 +1782,7 @@ var _ = Describe(string(fdbtypes.ProcessClassClusterController), func() {
 		Context("with a change to the public IP source", func() {
 			BeforeEach(func() {
 				source := fdbtypes.PublicIPSourceService
-				cluster.Spec.Services.PublicIPSource = &source
+				cluster.Spec.Routing.PublicIPSource = &source
 				err = k8sClient.Update(context.TODO(), cluster)
 				Expect(err).NotTo(HaveOccurred())
 			})
@@ -1840,7 +1840,7 @@ var _ = Describe(string(fdbtypes.ProcessClassClusterController), func() {
 		Context("with a change to the public IP source and multiple storage servers per Pod", func() {
 			BeforeEach(func() {
 				source := fdbtypes.PublicIPSourceService
-				cluster.Spec.Services.PublicIPSource = &source
+				cluster.Spec.Routing.PublicIPSource = &source
 				cluster.Spec.StorageServersPerPod = 2
 				err = k8sClient.Update(context.TODO(), cluster)
 			})
@@ -2232,7 +2232,7 @@ var _ = Describe(string(fdbtypes.ProcessClassClusterController), func() {
 		Context("when enabling a headless service", func() {
 			BeforeEach(func() {
 				var flag = true
-				cluster.Spec.Services.Headless = &flag
+				cluster.Spec.Routing.HeadlessService = &flag
 				err = k8sClient.Update(context.TODO(), cluster)
 				Expect(err).NotTo(HaveOccurred())
 			})
@@ -2250,7 +2250,7 @@ var _ = Describe(string(fdbtypes.ProcessClassClusterController), func() {
 		Context("when disabling a headless service", func() {
 			BeforeEach(func() {
 				var flag = true
-				cluster.Spec.Services.Headless = &flag
+				cluster.Spec.Routing.HeadlessService = &flag
 				err = k8sClient.Update(context.TODO(), cluster)
 				Expect(err).NotTo(HaveOccurred())
 
@@ -2261,7 +2261,7 @@ var _ = Describe(string(fdbtypes.ProcessClassClusterController), func() {
 				Expect(err).NotTo(HaveOccurred())
 				Expect(generation).To(Equal(originalVersion + 1))
 
-				*cluster.Spec.Services.Headless = false
+				*cluster.Spec.Routing.HeadlessService = false
 				generationGap = 2
 				err = k8sClient.Update(context.TODO(), cluster)
 				Expect(err).NotTo(HaveOccurred())
@@ -2696,7 +2696,7 @@ var _ = Describe(string(fdbtypes.ProcessClassClusterController), func() {
 		Context("with the public IP from the pod", func() {
 			BeforeEach(func() {
 				source := fdbtypes.PublicIPSourcePod
-				cluster.Spec.Services.PublicIPSource = &source
+				cluster.Spec.Routing.PublicIPSource = &source
 				conf, err = GetMonitorConf(cluster, fdbtypes.ProcessClassStorage, nil, 1)
 				Expect(err).NotTo(HaveOccurred())
 			})
@@ -2725,7 +2725,7 @@ var _ = Describe(string(fdbtypes.ProcessClassClusterController), func() {
 		Context("with the public IP from the service", func() {
 			BeforeEach(func() {
 				source := fdbtypes.PublicIPSourceService
-				cluster.Spec.Services.PublicIPSource = &source
+				cluster.Spec.Routing.PublicIPSource = &source
 				conf, err = GetMonitorConf(cluster, fdbtypes.ProcessClassStorage, nil, 1)
 				Expect(err).NotTo(HaveOccurred())
 			})

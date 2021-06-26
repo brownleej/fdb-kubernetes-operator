@@ -53,7 +53,7 @@ func (a AddServices) Reconcile(r *FoundationDBClusterReconciler, context ctx.Con
 		}
 	}
 
-	if *cluster.Spec.Services.PublicIPSource == fdbtypes.PublicIPSourceService {
+	if *cluster.Spec.Routing.PublicIPSource == fdbtypes.PublicIPSourceService {
 		for _, processGroup := range cluster.Status.ProcessGroups {
 			if processGroup.Remove {
 				continue
@@ -97,7 +97,7 @@ func (a AddServices) RequeueAfter() time.Duration {
 
 // GetHeadlessService builds a headless service for a FoundationDB cluster.
 func GetHeadlessService(cluster *fdbtypes.FoundationDBCluster) *corev1.Service {
-	headless := cluster.Spec.Services.Headless
+	headless := cluster.Spec.Routing.HeadlessService
 	if headless == nil || !*headless {
 		return nil
 	}
