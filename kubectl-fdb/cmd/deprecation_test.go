@@ -114,6 +114,7 @@ var _ = Describe("[plugin] deprecation command", func() {
 						},
 						Spec: fdbtypes.FoundationDBClusterSpec{
 							MinimumUptimeSecondsForBounce: 600,
+							UseExplicitListenAddress:      &boolValue,
 							Processes: map[fdbtypes.ProcessClass]fdbtypes.ProcessSettings{
 								"general": {
 									PodTemplate: &corev1.PodTemplateSpec{
@@ -175,6 +176,7 @@ var _ = Describe("[plugin] deprecation command", func() {
 						},
 						Spec: fdbtypes.FoundationDBClusterSpec{
 							MinimumUptimeSecondsForBounce: 600,
+							UseExplicitListenAddress:      &boolValue,
 							Processes: map[fdbtypes.ProcessClass]fdbtypes.ProcessSettings{
 								"general": {
 									PodTemplate: &corev1.PodTemplateSpec{
@@ -284,6 +286,7 @@ var _ = Describe("[plugin] deprecation command", func() {
 						},
 						Spec: fdbtypes.FoundationDBClusterSpec{
 							MinimumUptimeSecondsForBounce: 600,
+							UseExplicitListenAddress:      &boolValue,
 							Processes: map[fdbtypes.ProcessClass]fdbtypes.ProcessSettings{
 								"general": {
 									PodTemplate: &corev1.PodTemplateSpec{
@@ -428,6 +431,7 @@ processes:
 services:
   publicIPSource: pod
 sidecarContainer: {}
+useExplicitListenAddress: false
 version: ""`,
 					expectedError:   "1/1 cluster(s) with deprecations",
 					showClusterSpec: true,
@@ -533,6 +537,7 @@ processes:
       status: {}
 services: {}
 sidecarContainer: {}
+useExplicitListenAddress: false
 version: ""`,
 					expectedError:   "1/1 cluster(s) with deprecations",
 					showClusterSpec: true,

@@ -253,6 +253,7 @@ FoundationDBClusterSpec defines the desired state of a cluster.
 | minimumUptimeSecondsForBounce | MinimumUptimeSecondsForBounce defines the minimum time, in seconds, that the processes in the cluster must have been up for before the operator can execute a bounce. | int | false |
 | replaceInstancesWhenResourcesChange | ReplaceInstancesWhenResourcesChange defines if an instance should be replaced when the resource requirements are increased. This can be useful with the combination of local storage. | *bool | false |
 | skip | Skip defines if the cluster should be skipped for reconciliation. This can be useful for investigating in issues or if the environment is unstable. | bool | false |
+| useExplicitListenAddress | UseExplicitListenAddress determines if we should add a listen address that is separate from the public address. | *bool | false |
 
 [Back to TOC](#table-of-contents)
 

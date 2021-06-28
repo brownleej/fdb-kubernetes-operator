@@ -593,6 +593,11 @@ var _ = Describe("[internal] deprecations", func() {
 					Expect(spec.AutomationOptions.Replacements.FailureDetectionTimeSeconds).NotTo(BeNil())
 					Expect(*spec.AutomationOptions.Replacements.FailureDetectionTimeSeconds).To(Equal(1800))
 				})
+
+				It("should have explicit listen addresses disabled", func() {
+					Expect(spec.UseExplicitListenAddress).NotTo(BeNil())
+					Expect(*spec.UseExplicitListenAddress).To(BeFalse())
+				})
 			})
 
 			Context("with the current defaults, changes only", func() {
@@ -633,6 +638,11 @@ var _ = Describe("[internal] deprecations", func() {
 
 				It("should have no configuration for other automatic replacement options", func() {
 					Expect(spec.AutomationOptions.Replacements.FailureDetectionTimeSeconds).To(BeNil())
+				})
+
+				It("should have explicit listen addresses disabled", func() {
+					Expect(spec.UseExplicitListenAddress).NotTo(BeNil())
+					Expect(*spec.UseExplicitListenAddress).To(BeFalse())
 				})
 			})
 
@@ -772,6 +782,11 @@ var _ = Describe("[internal] deprecations", func() {
 					Expect(spec.AutomationOptions.Replacements.FailureDetectionTimeSeconds).NotTo(BeNil())
 					Expect(*spec.AutomationOptions.Replacements.FailureDetectionTimeSeconds).To(Equal(1800))
 				})
+
+				It("should have explicit listen addresses enabled", func() {
+					Expect(spec.UseExplicitListenAddress).NotTo(BeNil())
+					Expect(*spec.UseExplicitListenAddress).To(BeTrue())
+				})
 			})
 
 			Context("with the future defaults, changes only", func() {
@@ -807,6 +822,11 @@ var _ = Describe("[internal] deprecations", func() {
 
 				It("should have no configuration for other automatic replacement options", func() {
 					Expect(spec.AutomationOptions.Replacements.FailureDetectionTimeSeconds).To(BeNil())
+				})
+
+				It("should have explicit listen addresses enabled", func() {
+					Expect(spec.UseExplicitListenAddress).NotTo(BeNil())
+					Expect(*spec.UseExplicitListenAddress).To(BeTrue())
 				})
 			})
 

@@ -294,6 +294,11 @@ func NormalizeClusterSpec(spec *fdbtypes.FoundationDBClusterSpec, options Deprec
 		spec.AutomationOptions.Replacements.Enabled = &enabled
 	}
 
+	if spec.UseExplicitListenAddress == nil {
+		enabled := options.UseFutureDefaults
+		spec.UseExplicitListenAddress = &enabled
+	}
+
 	return nil
 }
 
