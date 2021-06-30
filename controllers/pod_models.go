@@ -463,6 +463,15 @@ func configureSidecarContainer(container *corev1.Container, initMode bool, insta
 		} else {
 			family := cluster.Spec.Routing.PodIPFamily
 			if family == nil {
+				familyAnnotation, present := cluster.ObjectMeta.Annotations["foundationdb.org/pod-ip-family"]
+				if present {
+					familyCast, err := strconv.Atoi(familyAnnotation)
+					if err != nil {
+						family = &familyCast
+					}
+				}
+			}
+			if family == nil {
 				publicIPKey = "status.podIP"
 			} else {
 				publicIPKey = "status.podIPs"
