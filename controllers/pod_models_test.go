@@ -454,6 +454,78 @@ var _ = Describe("pod_models", func() {
 			})
 		})
 
+		Context("with a pod IP pattern in an annotation", func() {
+			BeforeEach(func() {
+				cluster.ObjectMeta.Annotations = map[string]string{"foundationdb.org/pod-ip-family": "6"}
+				spec, err = GetPodSpec(cluster, fdbtypes.ProcessClassStorage, 1)
+			})
+
+			It("should have the built-in init container", func() {
+				Expect(len(spec.InitContainers)).To(Equal(1))
+				initContainer := spec.InitContainers[0]
+				Expect(initContainer.Name).To(Equal("foundationdb-kubernetes-init"))
+				Expect(initContainer.Args).To(Equal([]string{
+					"--copy-file",
+					"fdb.cluster",
+					"--input-monitor-conf",
+					"fdbmonitor.conf",
+					"--copy-binary",
+					"fdbserver",
+					"--copy-binary",
+					"fdbcli",
+					"--main-container-version",
+					"6.2.20",
+					"--public-ip-family",
+					"6",
+					"--init-mode",
+				}))
+				Expect(initContainer.Env).To(Equal([]corev1.EnvVar{
+					{Name: "FDB_PUBLIC_IP", ValueFrom: &corev1.EnvVarSource{
+						FieldRef: &corev1.ObjectFieldSelector{FieldPath: "status.podIPs"},
+					}},
+					{Name: "FDB_MACHINE_ID", ValueFrom: &corev1.EnvVarSource{
+						FieldRef: &corev1.ObjectFieldSelector{FieldPath: "metadata.name"},
+					}},
+					{Name: "FDB_ZONE_ID", ValueFrom: &corev1.EnvVarSource{
+						FieldRef: &corev1.ObjectFieldSelector{FieldPath: "metadata.name"},
+					}},
+					{Name: "FDB_INSTANCE_ID", Value: "storage-1"},
+				}))
+			})
+
+			It("should have the sidecar container", func() {
+				sidecarContainer := spec.Containers[1]
+				Expect(sidecarContainer.Name).To(Equal("foundationdb-kubernetes-sidecar"))
+				Expect(sidecarContainer.Args).To(Equal([]string{
+					"--copy-file",
+					"fdb.cluster",
+					"--input-monitor-conf",
+					"fdbmonitor.conf",
+					"--copy-binary",
+					"fdbserver",
+					"--copy-binary",
+					"fdbcli",
+					"--main-container-version",
+					"6.2.20",
+					"--public-ip-family",
+					"6",
+				}))
+				Expect(sidecarContainer.Env).To(Equal([]corev1.EnvVar{
+					{Name: "FDB_PUBLIC_IP", ValueFrom: &corev1.EnvVarSource{
+						FieldRef: &corev1.ObjectFieldSelector{FieldPath: "status.podIPs"},
+					}},
+					{Name: "FDB_MACHINE_ID", ValueFrom: &corev1.EnvVarSource{
+						FieldRef: &corev1.ObjectFieldSelector{FieldPath: "metadata.name"},
+					}},
+					{Name: "FDB_ZONE_ID", ValueFrom: &corev1.EnvVarSource{
+						FieldRef: &corev1.ObjectFieldSelector{FieldPath: "metadata.name"},
+					}},
+					{Name: "FDB_INSTANCE_ID", Value: "storage-1"},
+					{Name: "FDB_TLS_VERIFY_PEERS", Value: ""},
+				}))
+			})
+		})
+
 		Context("with an instance that is crash looping", func() {
 			BeforeEach(func() {
 				cluster.Spec.Buggify.CrashLoop = []string{"storage-1"}

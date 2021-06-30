@@ -466,8 +466,10 @@ func configureSidecarContainer(container *corev1.Container, initMode bool, insta
 				familyAnnotation, present := cluster.ObjectMeta.Annotations["foundationdb.org/pod-ip-family"]
 				if present {
 					familyCast, err := strconv.Atoi(familyAnnotation)
-					if err != nil {
+					if err == nil {
 						family = &familyCast
+					} else {
+						log.Error(err, "Error fetching pod IP family from the annotations")
 					}
 				}
 			}
