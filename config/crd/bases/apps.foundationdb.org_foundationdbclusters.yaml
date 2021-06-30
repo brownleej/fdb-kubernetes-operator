@@ -7564,8 +7564,8 @@ spec:
                   properties:
                     headlessService:
                       type: boolean
-                    podIPPattern:
-                      type: string
+                    podIPFamily:
+                      type: integer
                     publicIPSource:
                       type: string
                   type: object
