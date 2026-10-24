@@ -72,6 +72,7 @@ func (c updateStatus) reconcile(
 	if databaseStatus == nil {
 		var err error
 		databaseStatus, err = r.getStatusFromClusterOrDummyStatus(logger, cluster)
+		logger.Info("Debugging cluster status", "status", databaseStatus)
 		if err != nil {
 			// When the status cannot be fetched, we have to assume that the cluster is unavailable and unhealthy.
 			cluster.Status.Health.Available = false
