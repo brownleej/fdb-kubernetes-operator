@@ -90,8 +90,6 @@ func (c updateStatus) reconcile(
 			}
 		}
 	}
-	
-	logger.Info("Debugging cluster status", "status", databaseStatus)
 
 	versionMap := map[string]int{}
 	for _, process := range databaseStatus.Cluster.Processes {

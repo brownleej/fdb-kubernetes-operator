@@ -264,6 +264,8 @@ func (r *FoundationDBClusterReconciler) Reconcile(
 			cacheStatus,
 		)
 		status, err = r.getStatusFromClusterOrDummyStatus(clusterLog, cluster)
+
+		clusterLog.Info("Debugging cluster status", "status", status)
 		if err != nil {
 			clusterLog.Info(
 				"could not fetch machine-readable status and therefore didn't cache it",
