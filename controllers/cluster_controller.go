@@ -794,7 +794,9 @@ func (r *FoundationDBClusterReconciler) getStatusFromClusterOrDummyStatus(
 	logger logr.Logger,
 	cluster *fdbv1beta2.FoundationDBCluster,
 ) (*fdbv1beta2.FoundationDBStatus, error) {
+	logger.Info("Fetching status in getStatusFromClusterOrDummyStatus", "cluster", cluster)
 	if cluster.Status.ConnectionString == "" {
+		logger.Info("Returning empty status due to incomplete connection string")
 		return &fdbv1beta2.FoundationDBStatus{
 			Cluster: fdbv1beta2.FoundationDBStatusClusterInfo{
 				Layers: fdbv1beta2.FoundationDBStatusLayerInfo{
@@ -820,6 +822,7 @@ func (r *FoundationDBClusterReconciler) getStatusFromClusterOrDummyStatus(
 
 	status, err := adminClient.GetStatus()
 	if err == nil {
+		logger.Info("Retrieved status from adminClient", "status", status)
 		// Update the connection string if the newly fetched connection string is different from the current one and if the
 		// newly fetched connection string is not empty.
 		if cluster.Status.ConnectionString != status.Cluster.ConnectionString &&
@@ -871,6 +874,8 @@ func (r *FoundationDBClusterReconciler) getStatusFromClusterOrDummyStatus(
 
 		return nil, err
 	}
+
+	logger.Info("Retrieving default cluster status")
 
 	return &fdbv1beta2.FoundationDBStatus{
 		Cluster: fdbv1beta2.FoundationDBStatusClusterInfo{
