@@ -843,6 +843,8 @@ func (r *FoundationDBClusterReconciler) getStatusFromClusterOrDummyStatus(
 		return status, nil
 	}
 
+	logger.Error(err, "Error fetching cluster status")
+
 	// When we reached this part of the code the above GetStatus() called failed for some reason.
 	if cluster.Status.Configured {
 		// If the cluster is currently under a version incompatible upgrade, we try to assume the current version based
